@@ -40,7 +40,7 @@ function updateSizes() {
 };
 
 function createPointLight() {
-    light = new THREE.PointLight(0xffffff, 1.2, 10000);
+    light = new THREE.PointLight(0xffffff, 1.1, 1-1000);
     light.position.set(1000, 1000, 1000);
     light.castShadow = true;
     light.shadow.camera.near = 0.1;
@@ -48,36 +48,52 @@ function createPointLight() {
     light.shadow.mapSize.width = width;
     light.shadow.mapSize.height = height;
     scene.add(light);
-
+    console.log(light.shadow.camera)
     if (settings.lightHelpersEnabled) {
         var lightHelper = new THREE.PointLightHelper(light, 30);
         scene.add(lightHelper);
     }
 };
 
+// const group = new THREE.Group();
 function createMoon() {
-    var geometry = new THREE.SphereGeometry(200, 30, 30);
-    var material = new THREE.MeshLambertMaterial({
-        // color: 0xf60000,
+    var moonGeometry = new THREE.SphereGeometry(125, 30, 30);
+    var moonMaterial = new THREE.MeshLambertMaterial({
+        color: 0xffffff,
+        map: new THREE.TextureLoader().load("img/moon.jpg")
+    });
+    moon = new THREE.Mesh(moonGeometry, moonMaterial);
+    moon.position.set(400,100,150)
+    scene.add(moon);
+};
+
+function createEarth() {
+    var earthGeometry = new THREE.SphereGeometry(500, 30, 30);
+    var earthMaterial = new THREE.MeshLambertMaterial({
         color: 0xffffff,
         map: new THREE.TextureLoader().load("img/daymap.jpg")
     });
-    moon = new THREE.Mesh(geometry, material);
-    scene.add(moon);
+    earth = new THREE.Mesh(earthGeometry, earthMaterial);
+    earth.position.set(-400,-550,0)
+    scene.add(earth);
 };
 
 function animateMoon() {
     moon.rotation.y += 0.002;
 };
+function animateEarth() {
+    earth.rotation.y += 0.002;
+};
 
 function animateLight() {
     timestamp = Date.now() * 0.0001;
-    light.position.x = Math.cos(timestamp * 5) * 1500;
+    light.position.x = Math.cos(timestamp * 0) * 1500;
     light.position.z = Math.sin(timestamp * 5) * 1500;
 };
 
 function createControls() {
-    var controls = new THREE.OrbitControls(camera, renderer.domElement);
+    // var controls = 
+    new THREE.OrbitControls(camera, renderer.domElement);
 }
 
 function createBg(){
@@ -109,8 +125,9 @@ function init() {
 
     window.addEventListener('resize', onWindowResize, true);
 
-    createControls();
+    // createControls();
     createMoon();
+    createEarth();
     createPointLight();
     createBg();
 };
@@ -118,6 +135,7 @@ function init() {
 function animate() {
     requestAnimationFrame(animate);
     animateMoon();
+    animateEarth();
     //animateLight();
     renderer.render(scene, camera);
 };
