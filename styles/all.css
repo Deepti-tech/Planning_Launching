@@ -2,3 +2,10 @@ html, body {
     margin: 0;
     overflow: hidden;
 }
+.absolute{
+    position: absolute;
+    color: white;
+    text-transform: uppercase;
+    text-align: center;
+    left: 48%;
+}
