@@ -2,7 +2,7 @@ html, body {
     margin: 0;
     overflow: hidden;
 }
-.absolute{
+.title{
     position: absolute;
     color: white;
     text-transform: uppercase;
