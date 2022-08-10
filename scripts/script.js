@@ -1,15 +1,13 @@
-// import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.118/build/three.module.js';
+import {GLTFLoader} from 'https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/loaders/GLTFLoader.js';
 var width, height, 
     renderer,
-    scene,
-    camera,
-    moon,
-    earth,
+    scene, camera,
+    moon, earth,
     light,
-    mesh,
-    lat,
-    lng,
-    x,y,z;
+    northPoint, southPoint,
+    target,
+    time,delta;
 
 var settings = {
     camera: {
@@ -58,6 +56,22 @@ function createPointLight() {
     }
 };
 
+function animateLight() {
+    timestamp = Date.now() * 0.00001;
+    light.position.x = Math.cos(timestamp * 0) * 1500;
+    light.position.z = Math.sin(timestamp * 5) * 1500;
+};
+
+function createControls() {
+    new THREE.OrbitControls(camera, renderer.domElement);
+}
+
+function createBg(){
+    let loader = new THREE.TextureLoader()
+    let texture = loader.load("img/bg.jpg")
+    scene.background = texture;
+}
+
 function createMoon() {
     var moonGeometry = new THREE.SphereGeometry(125, 30, 30);
     var moonMaterial = new THREE.MeshLambertMaterial({
@@ -69,21 +83,6 @@ function createMoon() {
     scene.add(moon);
 };
 
-// function  getPath1(a,b){
-//     let v1=new THREE.Vector3(a.x,a.y,a.z)
-//     let v2=new THREE.Vector3(b.x,b.y,b.z)
-//     let points = []
-//     for (let i=0; i<=20; i++){
-//         let p=new THREE.Vector3().lerpVectors(v1,v2,i/20)
-//         p.multiplyScalar(1 + 0.5*Math.sin(Math.PI*i/20))
-//         points.push(p)
-//     }
-//     let curve = new THREE.CatmullRomCurve3(points)    
-//     const geometry = new THREE.TubeGeometry(curve)
-//     const material = new THREE.MeshBasicMaterial( { color: 0x00ffff } )
-//     const mesh = new THREE.Mesh( geometry, material )
-//     scene.add( mesh );
-// }
 function  getPath(a,b){
     let v1=new THREE.Vector3(a.x,a.y,a.z)
     let v2=new THREE.Vector3(b.x,b.y,b.z)
@@ -96,13 +95,6 @@ function  getPath(a,b){
     let curve = new THREE.CatmullRomCurve3(points)    
     const geometry = new THREE.TubeGeometry(curve)
     const material = new THREE.MeshBasicMaterial( { color: 0x00ffff } )
-    // const material = new THREE.LineDashedMaterial( {
-    //     color: 0xffffff,
-    //     linewidth: 1,
-    //     scale: 1,
-    //     dashSize: 3,
-    //     gapSize: 1,
-    // } );
     const mesh = new THREE.Mesh( geometry, material )
     scene.add( mesh );
 }
@@ -122,15 +114,15 @@ function north_South(){
     southPoint.position.set(550, 25, 0)
     scene.add(southPoint)
 
-    var img = new THREE.MeshBasicMaterial({
-        transparent: true,
-        map:THREE.ImageUtils.loadTexture('rocket.png')
-    });
-    img.map.needsUpdate = true;
-    var plane = new THREE.Mesh(new THREE.PlaneGeometry(200, 200),img);
-    plane.overdraw = true;
-    plane.position.set(-40, -40, 0)
-    scene.add(plane);
+    // var img = new THREE.MeshBasicMaterial({
+    //     transparent: true,
+    //     map:THREE.ImageUtils.loadTexture('rocket.png')
+    // });
+    // img.map.needsUpdate = true;
+    // var plane = new THREE.Mesh(new THREE.PlaneGeometry(200, 200),img);
+    // plane.overdraw = true;
+    // plane.position.set(-40, -40, 0)
+    // scene.add(plane);
 
     getPath({x:450,y:275,z:0}, {x:0,y:0,z:0})
     getPath({x:550,y:25,z:0}, {x:0,y:0,z:0})
@@ -154,20 +146,47 @@ function animateEarth() {
     earth.rotation.y += 0.004;
 };
 
-function animateLight() {
-    timestamp = Date.now() * 0.00001;
-    light.position.x = Math.cos(timestamp * 0) * 1500;
-    light.position.z = Math.sin(timestamp * 5) * 1500;
-};
+var entityManager, vehicle;
+function rocket(){
 
-function createControls() {
-    new THREE.OrbitControls(camera, renderer.domElement);
-}
+    // var img = new THREE.MeshBasicMaterial({
+    //     transparent: true,
+    //     map:THREE.ImageUtils.loadTexture('rocket.png')
+    // });
+    // img.map.needsUpdate = true;
+    // var plane = new THREE.Mesh(new THREE.PlaneGeometry(200, 200),img);
+    // plane.overdraw = true;
+    // plane.matrixAutoUpdate = false;
+    // // plane.position.set(-40, -40, 0)
+    // scene.add(plane);
 
-function createBg(){
-    let loader = new THREE.TextureLoader()
-    let texture = loader.load("img/bg.jpg")
-    scene.background = texture;
+    vehicle = new YUKA.Vehicle();
+    function sync(entity, renderComponent) {
+        renderComponent.matrix.copy(entity.worldMatrix);
+    }
+    // vehicle.setRenderComponent(plane, sync);
+   
+    const group = new THREE.Group();
+    const loader = new GLTFLoader();
+    loader.load( "rocket.gltf",
+        (gltf) => {
+            const model = gltf.scene;
+            model.matrixAutoUpdate = false;
+            group.add(model);
+            scene.add(group);
+            vehicle.setRenderComponent(model, sync);
+        }
+    );
+  
+    vehicle.maxSpeed = 30;
+    entityManager = new YUKA.EntityManager();
+    entityManager.add(vehicle);
+
+    target = new YUKA.GameEntity();
+    entityManager.add(target);
+
+    const arriveBehavior = new YUKA.ArriveBehavior(target.position, 3, 0.5);
+    vehicle.steering.add(arriveBehavior);
 }
 
 function init() {
@@ -197,16 +216,36 @@ function init() {
     createEarth();
     createPointLight();
     north_South();
-
-    
-    
+    rocket();
+    time = new YUKA.Time();
 };
+
+const raycaster = new THREE.Raycaster()
+const mouse = {
+    x: undefined, y: undefined
+}
+addEventListener('mousemove', (event) => {
+    mouse.x = (event.clientX/innerWidth)*2-1
+    mouse.y = -(event.clientY/innerHeight)*2+1
+})
+addEventListener('click', function() {
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(scene.children);
+    for(let i = 0; i < intersects.length; i++) {
+        // console.log(intersects[i].object.id)
+        if(intersects[i].object.id === 17){
+            target.position.set(intersects[i].point.x, intersects[i].point.y, intersects[i].point.z);
+        }
+    }
+});
 
 function animate() {
     requestAnimationFrame(animate);
     animateMoon();
     animateEarth();
     // animateLight();
+    delta = time.update().getDelta();
+    entityManager.update(delta);
     renderer.render(scene, camera);
 };
 
