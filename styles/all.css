@@ -22,7 +22,7 @@ body {
     right: 0px;
     bottom: 0px;
     min-height: fit-content;
-    width: 25%;
+    width: 35%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -30,62 +30,40 @@ body {
     flex-wrap: wrap;
     padding: 1rem;
     border-radius: 20px;
+    height: calc(100vh-8em);
 }
 
-.dynamic-txts li{
-    list-style: none;
-    color: white;
-    font-size: 1rem;
-    font-weight: 500;
+.line{
     position: relative;
-    top: 0;
-    animation: slide 12s steps(4) infinite;
-  }
-  /* @keyframes slide {
-    100%{
-      top: -50px;
-    }
-  } */
-
-.dynamic-txts li h3{
-    position: relative;
-    /* margin: 5px 0;
-    line-height: 90px; */
-  }
-
-  .dynamic-txts li p{
-    position: relative;
-    /* margin: 5px 0;
-    line-height: 90px; */
-  }
-
-  /* .dynamic-txts li h3::after{
-    content: "";
-    position: absolute;
-    left: 0;
-    height: 100%;
     width: 100%;
-    background: rgba(255,255,255, 0.2);
-    border-left: 2px solid white;
-    animation: typing 3s steps(10) infinite;
-  }
+    border-right: 2px solid white;
+    white-space: nowrap;
+    overflow: hidden;
+    transform: translateY(-50%);
 
-  .dynamic-txts li p::after{
-    content: "";
-    position: absolute;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background: rgba(255,255,255, 0.2);
-    border-left: 2px solid white;
-    animation: typing 3s steps(10) infinite;
-  }
-  
-  @keyframes typing {
-    40%, 60%{
-      left: calc(100% + 30px);
+}
+
+.anim-typewriter{
+    animation: typewriter 10s steps(40) 1s 1 normal both,
+    blinkTextCursor 500ms steps(40) infinite normal;
+
+}
+
+@keyframes typewriter{
+    from{
+        width: 0;
     }
-    100%{
-      left: 0;
+    to{
+        width: 100%;
     }
-  } */
+}
+
+@keyframes blinkTextCursor{
+    from{
+        border-right-color: rgba(255, 255, 255, 1);
+    }
+    to{
+        border-right-color: transparent;
+    }
+}
+
