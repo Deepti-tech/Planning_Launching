@@ -7,7 +7,8 @@ var width, height,
     light,
     northPoint, southPoint,
     target,
-    time,delta;
+    time,delta,
+    group, group1;
 
 var settings = {
     camera: {
@@ -146,39 +147,36 @@ function animateEarth() {
     earth.rotation.y += 0.004;
 };
 
-var entityManager, vehicle;
-function rocket(){
-
-    // var img = new THREE.MeshBasicMaterial({
-    //     transparent: true,
-    //     map:THREE.ImageUtils.loadTexture('rocket.png')
-    // });
-    // img.map.needsUpdate = true;
-    // var plane = new THREE.Mesh(new THREE.PlaneGeometry(200, 200),img);
-    // plane.overdraw = true;
-    // plane.matrixAutoUpdate = false;
-    // // plane.position.set(-40, -40, 0)
-    // scene.add(plane);
-
-    vehicle = new YUKA.Vehicle();
-    function sync(entity, renderComponent) {
-        renderComponent.matrix.copy(entity.worldMatrix);
-    }
-    // vehicle.setRenderComponent(plane, sync);
-   
-    const group = new THREE.Group();
-    const loader = new GLTFLoader();
+var entityManager, vehicle, loader;
+function rocket(){   
+    group = new THREE.Group();
+    loader = new GLTFLoader();
     loader.load( "rocket.gltf",
         (gltf) => {
             const model = gltf.scene;
             model.matrixAutoUpdate = false;
             group.add(model);
             scene.add(group);
-            vehicle.setRenderComponent(model, sync);
         }
     );
   
-    vehicle.maxSpeed = 30;
+    vehicle = new YUKA.Vehicle();
+    function sync(entity, renderComponent) {
+        renderComponent.matrix.copy(entity.worldMatrix);
+    }
+   
+    group1 = new THREE.Group();
+    loader = new GLTFLoader();
+    loader.load("rocket.gltf",                        //"scene.gltf",
+        (gltf) => {
+            const model1 = gltf.scene;
+            model1.matrixAutoUpdate = false;
+            group1.add(model1);
+            vehicle.setRenderComponent(model1, sync);
+        }
+    );
+  
+    vehicle.maxSpeed = 100;
     entityManager = new YUKA.EntityManager();
     entityManager.add(vehicle);
 
@@ -187,6 +185,17 @@ function rocket(){
 
     const arriveBehavior = new YUKA.ArriveBehavior(target.position, 3, 0.5);
     vehicle.steering.add(arriveBehavior);
+}
+
+function astronaut(){
+    // const loader = new GLTFLoader();
+    // loader.load( 'Astronaut.glb', function ( gltf ) {
+
+    //     const model = gltf.scene;
+    //     scene.add( model );
+    //     // model.position.set(-100,25,0)
+
+    // });
 }
 
 function init() {
@@ -218,6 +227,7 @@ function init() {
     north_South();
     rocket();
     time = new YUKA.Time();
+    astronaut();
 };
 
 const raycaster = new THREE.Raycaster()
@@ -232,8 +242,10 @@ addEventListener('click', function() {
     raycaster.setFromCamera(mouse, camera);
     const intersects = raycaster.intersectObjects(scene.children);
     for(let i = 0; i < intersects.length; i++) {
-        // console.log(intersects[i].object.id)
+        console.log(intersects[i].object.id)
         if(intersects[i].object.id === 17){
+            scene.remove(group)
+            scene.add(group1)
             target.position.set(intersects[i].point.x, intersects[i].point.y, intersects[i].point.z);
         }
     }
