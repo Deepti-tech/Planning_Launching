@@ -8,7 +8,7 @@ var width, height,
     northPoint, southPoint,
     target,
     time,delta,
-    group, group1;
+    group, group1, landed=0;
 
 var settings = {
     camera: {
@@ -247,6 +247,12 @@ addEventListener('click', function() {
             scene.remove(group)
             scene.add(group1)
             target.position.set(intersects[i].point.x, intersects[i].point.y, intersects[i].point.z);
+            document.getElementById("instruct").innerHTML="The South Pole is also a good target for a future human landing because robotically, it’s the most thoroughly investigated region on the Moon.";
+            landed=1;
+        }
+        else if(landed==0 && intersects[i].object.id === 16){
+            document.getElementById("instruct").innerHTML="Going wrong somewhere? Try again.";
+            landed=0;
         }
     }
 });
