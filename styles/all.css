@@ -1,11 +1,91 @@
-html, body {
+html,
+body {
     margin: 0;
     overflow: hidden;
 }
-.title{
+
+.title {
     position: absolute;
     color: white;
     text-transform: uppercase;
     text-align: center;
     width: 100%;
 }
+
+.popup {
+    font-family: 'Courier New', Courier, monospace;
+    position: absolute;
+    /* background-color: white; */
+    background: rgba(255,255,255, 0.2);
+    color: white;
+    margin: 1rem;
+    right: 0px;
+    bottom: 0px;
+    min-height: fit-content;
+    width: 25%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+    padding: 1rem;
+    border-radius: 20px;
+}
+
+.dynamic-txts li{
+    list-style: none;
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    position: relative;
+    top: 0;
+    animation: slide 12s steps(4) infinite;
+  }
+  /* @keyframes slide {
+    100%{
+      top: -50px;
+    }
+  } */
+
+.dynamic-txts li h3{
+    position: relative;
+    /* margin: 5px 0;
+    line-height: 90px; */
+  }
+
+  .dynamic-txts li p{
+    position: relative;
+    /* margin: 5px 0;
+    line-height: 90px; */
+  }
+
+  /* .dynamic-txts li h3::after{
+    content: "";
+    position: absolute;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(255,255,255, 0.2);
+    border-left: 2px solid white;
+    animation: typing 3s steps(10) infinite;
+  }
+
+  .dynamic-txts li p::after{
+    content: "";
+    position: absolute;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(255,255,255, 0.2);
+    border-left: 2px solid white;
+    animation: typing 3s steps(10) infinite;
+  }
+  
+  @keyframes typing {
+    40%, 60%{
+      left: calc(100% + 30px);
+    }
+    100%{
+      left: 0;
+    }
+  } */
