@@ -112,23 +112,21 @@ function north_South(){
 
     const loader = new FontLoader();
     loader.load( 'helvetiker_regular.typeface.json', function ( font ) {
-	const geometry = new TextGeometry( 'North Pole', {
-		font: font,
-		size: 15,
-		height: 5,
-		curveSegments: 12,
-		bevelEnabled: true,
-		bevelThickness: 2,
-		bevelSize: 2,
-		bevelOffset: 0,
-		bevelSegments: 2
-	} );
-    const textMesh1 = new THREE.Mesh( geometry,new THREE.MeshPhongMaterial( { color: 0xffffff } ));
-    textMesh1.position.x = 450;
-    textMesh1.position.y = 310;
-    textMesh1.position.z = 0;
-    scene.add(textMesh1)
-} );
+        const geometry = new TextGeometry( 'North Pole', {
+            font: font,
+            size: 15,
+            height: 5,
+            curveSegments: 12,
+            bevelEnabled: true,
+            bevelThickness: 2,
+            bevelSize: 2,
+            bevelOffset: 0,
+            bevelSegments: 2
+        } );
+        const textMesh1 = new THREE.Mesh( geometry,new THREE.MeshPhongMaterial( { color: 0xffffff } ));
+        textMesh1.position.set(450,310,0);
+        scene.add(textMesh1)
+    } );
 
 
     southPoint = new THREE.Mesh(
@@ -139,23 +137,20 @@ function north_South(){
     scene.add(southPoint)
 
     loader.load( 'helvetiker_regular.typeface.json', function ( font ) {
-	const geometry = new TextGeometry( 'South Pole', {
-		font: font,
-		size: 15,
-		height: 5,
-		curveSegments: 12,
-		bevelEnabled: true,
-		bevelThickness: 2,
-		bevelSize: 2,
-		bevelOffset: 0,
-		bevelSegments: 2
-	} );
-    const textMesh1 = new THREE.Mesh( geometry,new THREE.MeshPhongMaterial( { color: 0xffffff } ));
-
-    textMesh1.position.x = 425;
-    textMesh1.position.y = -7;
-    textMesh1.position.z = 110;
-    scene.add(textMesh1)
+        const geometry = new TextGeometry( 'South Pole', {
+            font: font,
+            size: 15,
+            height: 5,
+            curveSegments: 12,
+            bevelEnabled: true,
+            bevelThickness: 2,
+            bevelSize: 2,
+            bevelOffset: 0,
+            bevelSegments: 2
+        } );
+        const textMesh1 = new THREE.Mesh( geometry,new THREE.MeshPhongMaterial( { color: 0xffffff } ));
+        textMesh1.position.set(425,-7,110);
+        scene.add(textMesh1)
     } );
 
     // var img = new THREE.MeshBasicMaterial({
