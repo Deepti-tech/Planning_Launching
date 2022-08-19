@@ -111,9 +111,7 @@ function north_South(){
     scene.add(northPoint)
 
     const loader = new FontLoader();
-
     loader.load( 'helvetiker_regular.typeface.json', function ( font ) {
-
 	const geometry = new TextGeometry( 'North Pole', {
 		font: font,
 		size: 15,
@@ -126,7 +124,6 @@ function north_South(){
 		bevelSegments: 2
 	} );
     const textMesh1 = new THREE.Mesh( geometry,new THREE.MeshPhongMaterial( { color: 0xffffff } ));
-
     textMesh1.position.x = 450;
     textMesh1.position.y = 310;
     textMesh1.position.z = 0;
@@ -141,10 +138,7 @@ function north_South(){
     southPoint.position.set(480, 25, 100)
     scene.add(southPoint)
 
-    const loader2 = new FontLoader();
-
-    loader2.load( 'helvetiker_regular.typeface.json', function ( font ) {
-
+    loader.load( 'helvetiker_regular.typeface.json', function ( font ) {
 	const geometry = new TextGeometry( 'South Pole', {
 		font: font,
 		size: 15,
