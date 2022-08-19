@@ -1,5 +1,7 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.118/build/three.module.js';
 import {GLTFLoader} from 'https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/loaders/GLTFLoader.js';
+import {FontLoader} from "./src/FontLoader.js"
+import {TextGeometry} from "./src/TextGeometry.js"
 var width, height, 
     renderer,
     scene, camera,
@@ -57,15 +59,15 @@ function createPointLight() {
     }
 };
 
-function animateLight() {
-    timestamp = Date.now() * 0.00001;
-    light.position.x = Math.cos(timestamp * 0) * 1500;
-    light.position.z = Math.sin(timestamp * 5) * 1500;
-};
+// function animateLight() {
+//     timestamp = Date.now() * 0.00001;
+//     light.position.x = Math.cos(timestamp * 0) * 1500;
+//     light.position.z = Math.sin(timestamp * 5) * 1500;
+// };
 
-function createControls() {
-    new THREE.OrbitControls(camera, renderer.domElement);
-}
+// function createControls() {
+//     new THREE.OrbitControls(camera, renderer.domElement);
+// }
 
 function createBg(){
     let loader = new THREE.TextureLoader()
@@ -105,15 +107,62 @@ function north_South(){
         new THREE.SphereBufferGeometry(10,30,30),
         new THREE.MeshBasicMaterial({color:0x00ffff}));
         
-    northPoint.position.set(450, 275, 0)
+    northPoint.position.set(500, 289, 0)
     scene.add(northPoint)
+
+    const loader = new FontLoader();
+
+    loader.load( 'helvetiker_regular.typeface.json', function ( font ) {
+
+	const geometry = new TextGeometry( 'North Pole', {
+		font: font,
+		size: 15,
+		height: 5,
+		curveSegments: 12,
+		bevelEnabled: true,
+		bevelThickness: 2,
+		bevelSize: 2,
+		bevelOffset: 0,
+		bevelSegments: 2
+	} );
+    const textMesh1 = new THREE.Mesh( geometry,new THREE.MeshPhongMaterial( { color: 0xffffff } ));
+
+    textMesh1.position.x = 450;
+    textMesh1.position.y = 310;
+    textMesh1.position.z = 0;
+    scene.add(textMesh1)
+} );
+
 
     southPoint = new THREE.Mesh(
         new THREE.SphereBufferGeometry(10,30,30),
         new THREE.MeshBasicMaterial({color:0x00ffff}));
         
-    southPoint.position.set(550, 25, 0)
+    southPoint.position.set(480, 25, 100)
     scene.add(southPoint)
+
+    const loader2 = new FontLoader();
+
+    loader2.load( 'helvetiker_regular.typeface.json', function ( font ) {
+
+	const geometry = new TextGeometry( 'South Pole', {
+		font: font,
+		size: 15,
+		height: 5,
+		curveSegments: 12,
+		bevelEnabled: true,
+		bevelThickness: 2,
+		bevelSize: 2,
+		bevelOffset: 0,
+		bevelSegments: 2
+	} );
+    const textMesh1 = new THREE.Mesh( geometry,new THREE.MeshPhongMaterial( { color: 0xffffff } ));
+
+    textMesh1.position.x = 425;
+    textMesh1.position.y = -7;
+    textMesh1.position.z = 110;
+    scene.add(textMesh1)
+    } );
 
     // var img = new THREE.MeshBasicMaterial({
     //     transparent: true,
@@ -125,8 +174,8 @@ function north_South(){
     // plane.position.set(-40, -40, 0)
     // scene.add(plane);
 
-    getPath({x:450,y:275,z:0}, {x:0,y:0,z:0})
-    getPath({x:550,y:25,z:0}, {x:0,y:0,z:0})
+    getPath({x:500,y:289,z:20}, {x:0,y:0,z:0})
+    getPath({x:480,y:25,z:100}, {x:0,y:0,z:0})
 }
 
 function createEarth() {
@@ -167,7 +216,7 @@ function rocket(){
    
     group1 = new THREE.Group();
     loader = new GLTFLoader();
-    loader.load("rocket.gltf",                        //"scene.gltf",
+    loader.load("top.gltf",                    
         (gltf) => {
             const model1 = gltf.scene;
             model1.matrixAutoUpdate = false;
@@ -187,15 +236,13 @@ function rocket(){
     vehicle.steering.add(arriveBehavior);
 }
 
-function astronaut(){
-    // const loader = new GLTFLoader();
-    // loader.load( 'Astronaut.glb', function ( gltf ) {
-
-    //     const model = gltf.scene;
-    //     scene.add( model );
-    //     // model.position.set(-100,25,0)
-
-    // });
+function character(){
+    loader = new GLTFLoader();
+    loader.load( 'scene.gltf', function ( gltf ) {
+        const model3 = gltf.scene;
+        model3.position.set(25,-275,0)
+        scene.add( model3 );
+    });
 }
 
 function init() {
@@ -227,7 +274,7 @@ function init() {
     north_South();
     rocket();
     time = new YUKA.Time();
-    astronaut();
+    character();
 };
 
 const raycaster = new THREE.Raycaster()
