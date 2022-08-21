@@ -232,7 +232,7 @@ function character(){
         mixer = new THREE.AnimationMixer( avatar );
         mixer.clipAction(collada.animations[0]).play();
         avatar.position.set(-400,-60,20);
-        avatar.scale.set(40,40,40);
+        avatar.scale.set(50,50,50);
         avatar.rotation.z += 135;
         scene.add( avatar );
     } );
