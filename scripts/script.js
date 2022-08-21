@@ -13,7 +13,7 @@ var width, height,
     target,
     time,delta,
     group, group1, landed=0,
-    mixer;
+    mixer, progress, stage;
 
 var settings = {
     camera: {
@@ -214,10 +214,10 @@ function rocket(){
     target = new YUKA.GameEntity();
     entityManager.add(target);
 
-    const arriveBehavior = new YUKA.ArriveBehavior(target.position, 3, 0.5);
+    const arriveBehavior = new YUKA.ArriveBehavior(target.position, 3, 0);
     vehicle.steering.add(arriveBehavior);
 }
-var avatar
+var avatar, animation;
 function character(){
     const loader = new ColladaLoader();
     loader.load( 'character/stormtrooper.dae', function ( collada ) {
@@ -230,24 +230,29 @@ function character(){
         } );
 
         mixer = new THREE.AnimationMixer( avatar );
-        mixer.clipAction(collada.animations[0]).play();
+        animation = mixer.clipAction(collada.animations[0]);
         avatar.position.set(-400,-60,20);
+        // avatar.position.set(125,-400,20);
         avatar.scale.set(50,50,50);
         avatar.rotation.z += 135;
         scene.add( avatar );
     } );
 }
 
-function progress(){
-    var img = new THREE.MeshBasicMaterial({
-        transparent: true,
-        map:THREE.ImageUtils.loadTexture('rocket.png')
-    });
-    img.map.needsUpdate = true;
-    var plane = new THREE.Mesh(new THREE.PlaneGeometry(200, 200),img);
-    plane.overdraw = true;
-    plane.position.set(-40, -40, 0)
-    scene.add(plane);
+function Progress(){
+    progress = document.querySelector('.progress-done');
+    progress.style.width = '0%';
+    progress.style.opacity = 1;
+    stage = document.querySelector('.stages');
+    // var img = new THREE.MeshBasicMaterial({
+    //     transparent: true,
+    //     map:THREE.ImageUtils.loadTexture('rocket.png')
+    // });
+    // img.map.needsUpdate = true;
+    // var plane = new THREE.Mesh(new THREE.PlaneGeometry(200, 200),img);
+    // plane.overdraw = true;
+    // plane.position.set(-40, -40, 0)
+    // scene.add(plane);
 }
 
 var delta, clock;
@@ -282,6 +287,7 @@ function init() {
     rocket();
     time = new YUKA.Time();
     character();
+    Progress();
 };
 
 const raycaster = new THREE.Raycaster()
@@ -304,6 +310,10 @@ addEventListener('click', function() {
             document.getElementById("instruct").innerHTML="The South Pole is also a good target for a future human landing because robotically, it’s the most thoroughly investigated region on the Moon.";
             landed=1;
             document.getElementById("next-stage").style.display = "flex";
+            document.getElementById("stages").className = "planning-progress";
+            progress.style.width = '33.33%';
+            progress.innerHTML = "Planning"
+            animation.play();
         }
         else if(landed==0 && intersects[i].object.id === 16){
             document.getElementById("instruct").innerHTML="Going wrong somewhere? Try again.";
