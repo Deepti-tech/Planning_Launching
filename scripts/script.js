@@ -237,6 +237,19 @@ function character(){
         scene.add( avatar );
     } );
 }
+
+function progress(){
+    var img = new THREE.MeshBasicMaterial({
+        transparent: true,
+        map:THREE.ImageUtils.loadTexture('rocket.png')
+    });
+    img.map.needsUpdate = true;
+    var plane = new THREE.Mesh(new THREE.PlaneGeometry(200, 200),img);
+    plane.overdraw = true;
+    plane.position.set(-40, -40, 0)
+    scene.add(plane);
+}
+
 var delta, clock;
 function init() {
     updateSizes();
@@ -290,6 +303,7 @@ addEventListener('click', function() {
             target.position.set(intersects[i].point.x, intersects[i].point.y, intersects[i].point.z);
             document.getElementById("instruct").innerHTML="The South Pole is also a good target for a future human landing because robotically, it’s the most thoroughly investigated region on the Moon.";
             landed=1;
+            document.getElementById("next-stage").style.display = "flex";
         }
         else if(landed==0 && intersects[i].object.id === 16){
             document.getElementById("instruct").innerHTML="Going wrong somewhere? Try again.";
