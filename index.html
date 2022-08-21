@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore the moon</title>
+</head>
+<body>
+    <div>
+        <h1 class="title" id="title">Explore the moon</h1>
+    </div>
+    <h2 id="start-the-game">START</h2>
+</body>
+</html>
+<script>
+    document.getElementById("start-the-game").onclick = function () {
+        location.href="Planning.html";
+    };
+</script>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@700&display=swap');
+body{
+    /* background-image: url("images/background.png"); */
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    margin: 0%;
+    padding: 0%;
+    background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+}
+/* body img{
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  background-repeat: no-repeat;
+  background-size: cover;  
+} */
+.title {
+    font-family: 'Cormorant SC', serif;
+    font-size: 10rem;
+    margin-top: 15%;
+    color: aliceblue;
+}
+h2{
+    border: 2px solid white;
+    border-radius: 10px;
+    color:white;
+    width: 15%;
+    padding: 10px;
+}
+h2:hover{
+    cursor: pointer; 
+    background-color: #139AAC; 
+    color: azure;        
+}
+
+</style>
