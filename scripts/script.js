@@ -2,6 +2,8 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.118/build/three.mod
 import {GLTFLoader} from 'https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/loaders/GLTFLoader.js';
 import {FontLoader} from "./src/FontLoader.js"
 import {TextGeometry} from "./src/TextGeometry.js"
+import { ColladaLoader } from 'https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/loaders/ColladaLoader.js';
+
 var width, height, 
     renderer,
     scene, camera,
@@ -10,7 +12,8 @@ var width, height,
     northPoint, southPoint,
     target,
     time,delta,
-    group, group1, landed=0;
+    group, group1, landed=0,
+    mixer;
 
 var settings = {
     camera: {
@@ -111,7 +114,7 @@ function north_South(){
     scene.add(northPoint)
 
     const loader = new FontLoader();
-    loader.load( 'helvetiker_regular.typeface.json', function ( font ) {
+    loader.load( 'styles/helvetiker_regular.typeface.json', function ( font ) {
         const geometry = new TextGeometry( 'North Pole', {
             font: font,
             size: 15,
@@ -136,7 +139,7 @@ function north_South(){
     southPoint.position.set(480, 25, 100)
     scene.add(southPoint)
 
-    loader.load( 'helvetiker_regular.typeface.json', function ( font ) {
+    loader.load( 'styles/helvetiker_regular.typeface.json', function ( font ) {
         const geometry = new TextGeometry( 'South Pole', {
             font: font,
             size: 15,
@@ -189,7 +192,7 @@ var entityManager, vehicle, loader;
 function rocket(){   
     group = new THREE.Group();
     loader = new GLTFLoader();
-    loader.load( "rocket.gltf",
+    loader.load( "rocket/rocket.gltf",
         (gltf) => {
             const model = gltf.scene;
             model.matrixAutoUpdate = false;
@@ -205,7 +208,7 @@ function rocket(){
    
     group1 = new THREE.Group();
     loader = new GLTFLoader();
-    loader.load("top.gltf",                    
+    loader.load("rocket/top.gltf",                    
         (gltf) => {
             const model1 = gltf.scene;
             model1.matrixAutoUpdate = false;
@@ -224,16 +227,31 @@ function rocket(){
     const arriveBehavior = new YUKA.ArriveBehavior(target.position, 3, 0.5);
     vehicle.steering.add(arriveBehavior);
 }
-
+var avatar
 function character(){
-    loader = new GLTFLoader();
-    loader.load( 'scene.gltf', function ( gltf ) {
-        const model3 = gltf.scene;
-        model3.position.set(25,-275,0)
-        scene.add( model3 );
-    });
-}
+    const loader = new ColladaLoader();
+    loader.load( 'character/stormtrooper.dae', function ( collada ) {
 
+        avatar = collada.scene;
+        avatar.traverse( function ( node ) {
+            if ( node.isSkinnedMesh ) {
+                node.frustumCulled = false;
+            }
+        } );
+
+        mixer = new THREE.AnimationMixer( avatar );
+        mixer.clipAction(collada.animations[0]).play();
+        // avatar.position.set(125,-400,0);
+        // avatar.position.set(-400,-60,20);
+        avatar.position.set(750,-400,0)
+        avatar.scale.set(40,40,40);
+        avatar.rotation.z += 135;
+        // console.log(collada)
+        scene.add( avatar );
+        // console.log(mixer)
+    } );
+}
+var delta, clock;
 function init() {
     updateSizes();
     var canvas = document.getElementById("canvas");
@@ -247,6 +265,10 @@ function init() {
     renderer.shadowMap.enabled = settings.shadowsEnabled;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     document.body.appendChild(renderer.domElement);
+    var displayText = document.getElementsByClassName("popup")
+    // displayText.position.set(0,0,10)
+    console.log(displayText.position)
+    clock = new THREE.Clock();
 
     if (settings.ambientLight.enabled) {
         var ambientLight = new THREE.AmbientLight(settings.ambientLight.color, settings.ambientLight.intensity);
@@ -300,6 +322,9 @@ function animate() {
     // animateLight();
     delta = time.update().getDelta();
     entityManager.update(delta);
+    if ( mixer) {
+        mixer.update( delta );
+    }
     renderer.render(scene, camera);
 };
 
