@@ -156,16 +156,6 @@ function north_South(){
         scene.add(textMesh1)
     } );
 
-    // var img = new THREE.MeshBasicMaterial({
-    //     transparent: true,
-    //     map:THREE.ImageUtils.loadTexture('rocket.png')
-    // });
-    // img.map.needsUpdate = true;
-    // var plane = new THREE.Mesh(new THREE.PlaneGeometry(200, 200),img);
-    // plane.overdraw = true;
-    // plane.position.set(-40, -40, 0)
-    // scene.add(plane);
-
     getPath({x:500,y:289,z:20}, {x:0,y:0,z:0})
     getPath({x:480,y:25,z:100}, {x:0,y:0,z:0})
 }
@@ -241,14 +231,10 @@ function character(){
 
         mixer = new THREE.AnimationMixer( avatar );
         mixer.clipAction(collada.animations[0]).play();
-        // avatar.position.set(125,-400,0);
         avatar.position.set(-400,-60,20);
-        // avatar.position.set(750,-400,0)
         avatar.scale.set(40,40,40);
         avatar.rotation.z += 135;
-        // console.log(collada)
         scene.add( avatar );
-        // console.log(mixer)
     } );
 }
 var delta, clock;
@@ -265,9 +251,6 @@ function init() {
     renderer.shadowMap.enabled = settings.shadowsEnabled;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     document.body.appendChild(renderer.domElement);
-    var displayText = document.getElementsByClassName("popup")
-    // displayText.position.set(0,0,10)
-    console.log(displayText.position)
     clock = new THREE.Clock();
 
     if (settings.ambientLight.enabled) {
