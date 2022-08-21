@@ -182,10 +182,10 @@ function createEarth() {
 };
 
 function animateMoon() {
-    moon.rotation.y += 0.002;
+    moon.rotation.y += 0.006;
 };
 function animateEarth() {
-    earth.rotation.y += 0.004;
+    earth.rotation.y += 0.008;
 };
 
 var entityManager, vehicle, loader;
@@ -242,8 +242,8 @@ function character(){
         mixer = new THREE.AnimationMixer( avatar );
         mixer.clipAction(collada.animations[0]).play();
         // avatar.position.set(125,-400,0);
-        // avatar.position.set(-400,-60,20);
-        avatar.position.set(750,-400,0)
+        avatar.position.set(-400,-60,20);
+        // avatar.position.set(750,-400,0)
         avatar.scale.set(40,40,40);
         avatar.rotation.z += 135;
         // console.log(collada)
