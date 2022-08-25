@@ -13,7 +13,7 @@ var width, height,
     target,
     time,delta,
     group, group1, landed=0,
-    mixer, progress, stage;
+    mixer;
 
 var settings = {
     camera: {
@@ -110,7 +110,7 @@ function north_South(){
         new THREE.SphereBufferGeometry(10,30,30),
         new THREE.MeshBasicMaterial({color:0x00ffff}));
         
-    northPoint.position.set(500, 289, 0)
+    northPoint.position.set(500, 285, 15)
     scene.add(northPoint)
 
     const loader = new FontLoader();
@@ -158,6 +158,29 @@ function north_South(){
 
     getPath({x:500,y:289,z:20}, {x:0,y:0,z:0})
     getPath({x:480,y:25,z:100}, {x:0,y:0,z:0})
+}
+
+function north_is_incorrect(){
+    northPoint = new THREE.Mesh(
+        new THREE.SphereBufferGeometry(10,30,30),
+        new THREE.MeshBasicMaterial({color:0xFF0000}));
+        
+    northPoint.position.set(500, 285, 15)
+    scene.add(northPoint)
+
+    let v1=new THREE.Vector3(500,289,20)
+    let v2=new THREE.Vector3(0,0,0)
+    let points = []
+    for (let i=0; i<=20; i++){
+        let p=new THREE.Vector3().lerpVectors(v1,v2,i/20)
+        p.multiplyScalar(1 + 0.1*Math.sin(Math.PI*i/20))
+        points.push(p)
+    }
+    let curve = new THREE.CatmullRomCurve3(points)    
+    const geometry = new THREE.TubeGeometry(curve)
+    const material = new THREE.MeshBasicMaterial( { color: 0xFF0000 } )
+    const mesh = new THREE.Mesh( geometry, material )
+    scene.add( mesh );
 }
 
 function createEarth() {
@@ -233,26 +256,18 @@ function character(){
         animation = mixer.clipAction(collada.animations[0]);
         avatar.position.set(-400,-60,20);
         // avatar.position.set(125,-400,20);
-        avatar.scale.set(50,50,50);
+        avatar.scale.set(40,40,40);
         avatar.rotation.z += 135;
         scene.add( avatar );
     } );
 }
 
 function Progress(){
-    progress = document.querySelector('.progress-done');
-    progress.style.width = '0%';
+    var  progress = document.querySelector('.progress-done');
+    document.getElementById("stages").className = "planning-progress";
     progress.style.opacity = 1;
-    stage = document.querySelector('.stages');
-    // var img = new THREE.MeshBasicMaterial({
-    //     transparent: true,
-    //     map:THREE.ImageUtils.loadTexture('rocket.png')
-    // });
-    // img.map.needsUpdate = true;
-    // var plane = new THREE.Mesh(new THREE.PlaneGeometry(200, 200),img);
-    // plane.overdraw = true;
-    // plane.position.set(-40, -40, 0)
-    // scene.add(plane);
+    progress.style.width = '33.33%';
+    progress.innerHTML = "Planning"
 }
 
 var delta, clock;
@@ -282,12 +297,12 @@ function init() {
     createBg();
     createMoon();
     createEarth();
-    createPointLight();
     north_South();
     rocket();
     time = new YUKA.Time();
     character();
-    Progress();
+    createPointLight();
+    animate();
 };
 
 const raycaster = new THREE.Raycaster()
@@ -303,21 +318,20 @@ addEventListener('click', function() {
     const intersects = raycaster.intersectObjects(scene.children);
     for(let i = 0; i < intersects.length; i++) {
         console.log(intersects[i].object.id)
-        if(intersects[i].object.id === 17){
+        if(intersects[i].object.id === 17 || intersects[i].object.id === 15 || intersects[i].object.id === 24){
             scene.remove(group)
             scene.add(group1)
             target.position.set(intersects[i].point.x, intersects[i].point.y, intersects[i].point.z);
             document.getElementById("instruct").innerHTML="The South Pole is also a good target for a future human landing because robotically, it’s the most thoroughly investigated region on the Moon.";
             landed=1;
             document.getElementById("next-stage").style.display = "flex";
-            document.getElementById("stages").className = "planning-progress";
-            progress.style.width = '33.33%';
-            progress.innerHTML = "Planning"
+            Progress();
             animation.play();
         }
-        else if(landed==0 && intersects[i].object.id === 16){
+        else if(landed==0 && intersects[i].object.id === 16 || intersects[i].object.id === 14 || intersects[i].object.id === 23){
             document.getElementById("instruct").innerHTML="Going wrong somewhere? Try again.";
             landed=0;
+            north_is_incorrect();
         }
     }
 });
@@ -336,6 +350,7 @@ function animate() {
 };
 
 window.onload = function () {
+    document.getElementById('title').className = 'animate-title';
     init();
-    animate();
+    
 }

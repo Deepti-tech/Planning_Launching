@@ -7,14 +7,59 @@
     <title>Explore the moon</title>
 </head>
 <body>
-    <div>
-        <h1 class="title" id="title">Explore the moon</h1>
+    <div class="main" id="title">
+        <span>E</span>
+        <span>X</span>
+        <span>P</span>
+        <span>L</span>
+        <span class="letter"></span>
+        <span>R</span>
+        <span>E</span>
+        <span></span><span></span>
+        <span>T</span>
+        <span>H</span>
+        <span>E</span>
+        <span></span><span></span>
+        <span>M</span>
+        <span>O</span>
+        <span>O</span>
+        <span>N</span>
     </div>
+    <!-- <div>
+        <h1 class="title" id="title">Explore the moon</h1>
+    </div> -->
     <h2 id="start-the-game">START</h2>
+    <div class="container" id="container">
+        <div class="timeline">
+          <ul>
+            <li id="plannning">
+              <div class="timeline-content">
+                <h1>Planning</h1>
+              </div>
+            </li>
+            <li>
+              <div class="timeline-content">
+                <h1>Launching</h1>
+              </div>
+            </li>
+            <li>
+              <div class="timeline-content">
+                <h1>Research</h1>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
 </body>
 </html>
 <script>
     document.getElementById("start-the-game").onclick = function () {
+        document.getElementById('title').className = 'animate-title';
+        document.getElementById('start-the-game').style.display = 'none';
+        document.getElementById('container').style.opacity = 1;
+        // location.href="Planning.html";
+    };
+    document.getElementById("plannning").onclick = function () {
         location.href="Planning.html";
     };
 </script>
@@ -36,20 +81,51 @@ body{
     flex-direction: column;
     text-align: center;
 }
-/* body img{
-  height: 100%;
-  width: 100%;
-  overflow-x: hidden;
-  overflow-y: hidden;
-  background-repeat: no-repeat;
-  background-size: cover;  
-} */
-.title {
+span{
+	margin: 0 10px;
+	line-height: .7;
+	animation: span 3s ease-in infinite alternate;
+}
+.main{
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+    margin-top: 15%;
+    color: aliceblue;
+    font-size: 5rem;
+    padding: 5%;
+}
+.animate-title{
+    display: flex;
+	justify-content: center;
+	align-items: flex-start;
+    margin-top: 5%;
+    color: aliceblue;
+    font-size: 5rem;
+    transition: 1s ease 0.3s;
+}
+.letter{
+	display: inline-flex;
+	height: 3rem;
+	width: 27px;
+	border: 2.5px solid white;
+	border-radius: 14px;
+	animation: letter 3s ease-in-out infinite alternate;
+}
+@keyframes span {
+	0%,30%{ margin: 0 15px; }
+	70%,100%{ margin: 0 5px; }
+}
+@keyframes letter {
+	0%,30%{ width: 27px; }
+	70%,100%{ width: 30vw; }
+}
+/* .title {
     font-family: 'Cormorant SC', serif;
     font-size: 10rem;
     margin-top: 15%;
     color: aliceblue;
-}
+} */
 h2{
     border: 2px solid white;
     border-radius: 10px;
@@ -62,5 +138,89 @@ h2:hover{
     background-color: #139AAC; 
     color: azure;        
 }
+
+.container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  /* background-color: rgb(184, 36, 36); */
+}
+.timeline {
+  width: 80%;
+  height: auto;
+  max-width: 800px;
+  margin: 0 0 0 0;
+  position: relative;
+}
+
+.timeline ul {
+  list-style: none;
+}
+.timeline ul li {
+  padding: 20px 0 20px 0;
+  background-color: #1e1f22;
+  color: white;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+.timeline ul li:last-child {
+  margin-bottom: 0;
+}
+.timeline-content h1 {
+  font-weight: 500;
+  font-size: 25px;
+  line-height: 30px;
+  margin-bottom: 10px;
+}
+  .timeline:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 52.5%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 74%;
+    background-color: gray;
+  }
+  .timeline ul li {
+    width: 50%;
+    position: relative;
+    margin-bottom: 50px;
+  }
+  .timeline ul li:nth-child(odd) {
+    float: left;
+    clear: right;
+    transform: translateX(-30px);
+    border-radius: 20px 0px 20px 20px;
+  }
+  .timeline ul li:nth-child(even) {
+    float: right;
+    clear: left;
+    transform: translateX(30px);
+    border-radius: 0px 20px 20px 20px;
+  }
+  .timeline ul li::before {
+    content: "";
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background-color: gray;
+    top: 0px;
+  }
+  .timeline ul li:nth-child(odd)::before {
+    transform: translate(50%, -50%);
+    right: -30px;
+  }
+  .timeline ul li:nth-child(even)::before {
+    transform: translate(-50%, -50%);
+    left: -30px;
+  }
+  .timeline ul li:hover::before {
+    background-color: aqua;
+  }
 
 </style>

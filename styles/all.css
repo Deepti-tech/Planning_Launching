@@ -1,15 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@700&display=swap');
+
 html,
 body {
     margin: 0;
     overflow: hidden;
+    background-color: black;
 }
 
 .title {
+    font-family: 'Cormorant SC', serif;
+    font-size: 5rem;
+    margin-top: 15%;
+    color: aliceblue;
+    position: absolute;
+    text-transform: uppercase;
+    text-align: center;
+    width: 100%;
+}
+.animate-title{
     position: absolute;
     color: white;
     text-transform: uppercase;
     text-align: center;
     width: 100%;
+    transition: 1s ease 0.3s;
 }
 
 .popup {
@@ -111,6 +125,6 @@ h2:hover{
 	justify-content: center;
 	height: 100%;
 	width: 0;
-	opacity: 0;
+	opacity: 1;
 	transition: 1s ease 0.3s;
 }
