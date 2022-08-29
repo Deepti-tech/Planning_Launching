@@ -88,10 +88,11 @@ function createMoon() {
     moon.position.set(500,150,0)
     scene.add(moon);
 };
-
-function  getPath(a,b){
-    let v1=new THREE.Vector3(a.x,a.y,a.z)
-    let v2=new THREE.Vector3(b.x,b.y,b.z)
+var northPath, southPath;
+function  getPath(){
+    let v1=new THREE.Vector3(500,289,20)
+    let v2=new THREE.Vector3(0,0,0)
+    let v3=new THREE.Vector3(480,25,100)
     let points = []
     for (let i=0; i<=20; i++){
         let p=new THREE.Vector3().lerpVectors(v1,v2,i/20)
@@ -99,10 +100,21 @@ function  getPath(a,b){
         points.push(p)
     }
     let curve = new THREE.CatmullRomCurve3(points)    
-    const geometry = new THREE.TubeGeometry(curve)
+    let geometry1 = new THREE.TubeGeometry(curve)
     const material = new THREE.MeshBasicMaterial( { color: 0x00ffff } )
-    const mesh = new THREE.Mesh( geometry, material )
-    scene.add( mesh );
+    northPath = new THREE.Mesh( geometry1, material )
+    scene.add( northPath );
+
+    let points2 = []
+    for (let i=0; i<=20; i++){
+        let p=new THREE.Vector3().lerpVectors(v3,v2,i/20)
+        p.multiplyScalar(1 + 0.1*Math.sin(Math.PI*i/20))
+        points2.push(p)
+    }
+    curve = new THREE.CatmullRomCurve3(points2)    
+    let geometry2 = new THREE.TubeGeometry(curve)
+    southPath = new THREE.Mesh( geometry2, material )
+    scene.add( southPath );
 }
 
 function north_South(){
@@ -155,12 +167,10 @@ function north_South(){
         textMesh1.position.set(425,-7,110);
         scene.add(textMesh1)
     } );
-
-    getPath({x:500,y:289,z:20}, {x:0,y:0,z:0})
-    getPath({x:480,y:25,z:100}, {x:0,y:0,z:0})
 }
 
 function north_is_incorrect(){
+    scene.remove(northPoint)
     northPoint = new THREE.Mesh(
         new THREE.SphereBufferGeometry(10,30,30),
         new THREE.MeshBasicMaterial({color:0xFF0000}));
@@ -168,6 +178,7 @@ function north_is_incorrect(){
     northPoint.position.set(500, 285, 15)
     scene.add(northPoint)
 
+    scene.remove(northPath)
     let v1=new THREE.Vector3(500,289,20)
     let v2=new THREE.Vector3(0,0,0)
     let points = []
@@ -179,8 +190,8 @@ function north_is_incorrect(){
     let curve = new THREE.CatmullRomCurve3(points)    
     const geometry = new THREE.TubeGeometry(curve)
     const material = new THREE.MeshBasicMaterial( { color: 0xFF0000 } )
-    const mesh = new THREE.Mesh( geometry, material )
-    scene.add( mesh );
+    northPath = new THREE.Mesh( geometry, material )
+    scene.add( northPath );
 }
 
 function createEarth() {
@@ -303,6 +314,7 @@ function init() {
     character();
     createPointLight();
     animate();
+    getPath();
 };
 
 const raycaster = new THREE.Raycaster()
@@ -320,6 +332,8 @@ addEventListener('click', function() {
         console.log(intersects[i].object.id)
         if(intersects[i].object.id === 17 || intersects[i].object.id === 15 || intersects[i].object.id === 24){
             scene.remove(group)
+            scene.remove(northPath); 
+            scene.remove(southPath);
             scene.add(group1)
             target.position.set(intersects[i].point.x, intersects[i].point.y, intersects[i].point.z);
             document.getElementById("instruct").innerHTML="The South Pole is also a good target for a future human landing because robotically, it’s the most thoroughly investigated region on the Moon.";
@@ -327,6 +341,8 @@ addEventListener('click', function() {
             document.getElementById("next-stage").style.display = "flex";
             Progress();
             animation.play();
+            scene.remove(northPoint);
+            scene.remove(southPoint);
         }
         else if(landed==0 && intersects[i].object.id === 16 || intersects[i].object.id === 14 || intersects[i].object.id === 23){
             document.getElementById("instruct").innerHTML="Going wrong somewhere? Try again.";
