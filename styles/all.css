@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@700&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Edu+TAS+Beginner:wght@400;500;600&family=Uncial+Antiqua&display=swap');
 html,
 body {
     margin: 0;
@@ -8,7 +8,10 @@ body {
 }
 
 .title {
-    font-family: 'Cormorant SC', serif;
+    /* font-family: 'Cormorant SC', serif; */
+    /* font-family: 'Edu TAS Beginner', cursive; */
+    font-family: 'Uncial Antiqua', cursive;
+    font-weight: 400;
     font-size: 5rem;
     margin-top: 15%;
     color: aliceblue;
@@ -18,6 +21,8 @@ body {
     width: 100%;
 }
 .animate-title{
+    font-family: 'Uncial Antiqua', cursive;
+    font-weight: lighter;
     position: absolute;
     color: white;
     text-transform: uppercase;
@@ -29,10 +34,9 @@ body {
 .popup {
     font-family: 'Courier New', Courier, monospace;
     position: absolute;
-    /* background-color: white; */
-    background: rgba(255,255,255, 0.2);
-    color: white;
-    margin: 1rem;
+    background: rgba(178, 212, 240, 0.2);
+    color: rgb(255, 255, 255);
+    margin: 1rem 4rem 1rem 3rem;
     right: 0px;
     bottom: 0px;
     min-height: fit-content;
@@ -54,7 +58,7 @@ body {
     white-space: nowrap;
     overflow: hidden;
     transform: translateY(-50%);
-
+    font-weight: bolder;
 }
 
 .anim-typewriter{
@@ -112,7 +116,7 @@ h2:hover{
 	border-radius: 20px;
 	position: absolute;
 	margin: 30px 0 0 20px;
-	height: 20px;
+	height: 25px;
 	width: 300px;
 }
 

@@ -12,7 +12,7 @@ var width, height,
     northPoint, southPoint,
     target,
     time,delta,
-    group, group1, landed=0,
+    group, group1,
     mixer;
 
 var settings = {
@@ -337,16 +337,14 @@ addEventListener('click', function() {
             scene.add(group1)
             target.position.set(intersects[i].point.x, intersects[i].point.y, intersects[i].point.z);
             document.getElementById("instruct").innerHTML="The South Pole is also a good target for a future human landing because robotically, it’s the most thoroughly investigated region on the Moon.";
-            landed=1;
             document.getElementById("next-stage").style.display = "flex";
             Progress();
             animation.play();
             scene.remove(northPoint);
             scene.remove(southPoint);
         }
-        else if(landed==0 && intersects[i].object.id === 16 || intersects[i].object.id === 14 || intersects[i].object.id === 23){
+        else if(intersects[i].object.id === 16 || intersects[i].object.id === 14 || intersects[i].object.id === 23){
             document.getElementById("instruct").innerHTML="Going wrong somewhere? Try again.";
-            landed=0;
             north_is_incorrect();
         }
     }
