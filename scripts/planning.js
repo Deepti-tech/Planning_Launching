@@ -336,7 +336,7 @@ addEventListener('click', function() {
             scene.remove(southPath);
             scene.add(group1)
             target.position.set(intersects[i].point.x, intersects[i].point.y, intersects[i].point.z);
-            document.getElementById("instruct").innerHTML="The South Pole is also a good target for a future human landing because robotically, it’s the most thoroughly investigated region on the Moon.";
+            document.getElementById("instruct").innerHTML="CORRECT!<br> At the south pole, 14 days is daytime and 14 days is night time. Thus, ice is found on the south pole. It is also a good target for a future human landing because robotically, it’s the most thoroughly investigated region on the Moon.";
             document.getElementById("next-stage").style.display = "flex";
             Progress();
             animation.play();
@@ -344,7 +344,7 @@ addEventListener('click', function() {
             scene.remove(southPoint);
         }
         else if(intersects[i].object.id === 16 || intersects[i].object.id === 14 || intersects[i].object.id === 23){
-            document.getElementById("instruct").innerHTML="Going wrong somewhere? Try again.";
+            document.getElementById("instruct").innerHTML="TRY AGAIN!<br>The moon’s pole is 5° slanted towards the sun. So the entire northpole region will receive sun's rays through out the lunar day. On the north pole, though the temperature is low, because of constant daytime , it is always dry. So there is nothing to gain in landing on the lunar northpole.";
             north_is_incorrect();
         }
     }
